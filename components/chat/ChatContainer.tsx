@@ -111,10 +111,11 @@ export function ChatContainer({
         try {
           const errData = await response.json();
           if (errData?.error) errMessage = errData.error;
-        } catch {
-          // fallback to status text
-        }
-        throw new Error(errMessage);
+        } catch {}
+        setError(errMessage);
+        setIsStreaming(false);
+        setStreamingContent("");
+        return;
       }
 
       // Check headers for new conversation ID
@@ -135,7 +136,9 @@ export function ChatContainer({
       }
 
       if (!response.body) {
-        throw new Error("No response body received from server.");
+        setError("No response body received from server.");
+        setIsStreaming(false);
+        return;
       }
 
       const reader = response.body.getReader();
@@ -165,7 +168,6 @@ export function ChatContainer({
         // Handled cleanly in handleStop
         return;
       }
-      console.error("Chat error:", err);
       setError(err?.message || "An unexpected error occurred.");
     } finally {
       setIsStreaming(false);
