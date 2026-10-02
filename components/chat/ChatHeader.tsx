@@ -1,13 +1,22 @@
 "use client";
 
 import * as React from "react";
-import { Menu, Plus, Settings2, Sparkles } from "lucide-react";
+import { Menu, Plus, Settings2, Sparkles, ChevronDown, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { AVAILABLE_MODELS, getModelById } from "@/lib/ai";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface ChatHeaderProps {
   title?: string;
   modelName: string;
+  onModelChange?: (modelId: string) => void;
   onToggleSidebar?: () => void;
   onNewChat: () => void;
   onOpenSettings: () => void;
@@ -16,10 +25,23 @@ interface ChatHeaderProps {
 export function ChatHeader({
   title = "AI Assistant",
   modelName,
+  onModelChange,
   onToggleSidebar,
   onNewChat,
   onOpenSettings,
 }: ChatHeaderProps) {
+  const currentModel = getModelById(modelName);
+
+  // Group models by provider
+  const providers = [
+    "OpenAI",
+    "DeepSeek",
+    "xAI (Grok)",
+    "Anthropic",
+    "Google",
+    "Open Source / Astra",
+  ] as const;
+
   return (
     <header className="h-14 border-b border-border px-3 sm:px-4 flex items-center justify-between bg-background/80 backdrop-blur-xs sticky top-0 z-10 shrink-0">
       <div className="flex items-center gap-2 overflow-hidden mr-2">
@@ -51,10 +73,72 @@ export function ChatHeader({
           <h1 className="text-sm font-semibold truncate text-foreground">
             {title}
           </h1>
-          <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-muted text-muted-foreground border border-border/60 shrink-0">
-            <Sparkles className="h-2.5 w-2.5 text-primary" />
-            {modelName}
-          </span>
+
+          {/* Interactive Model Selector Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-muted/80 hover:bg-muted text-foreground border border-border/80 transition-all cursor-pointer select-none shrink-0"
+                title="Switch AI model"
+                aria-label="Select AI Model"
+              >
+                <Sparkles className="h-3 w-3 text-primary" />
+                <span className="font-semibold">{currentModel.name}</span>
+                <ChevronDown className="h-3 w-3 opacity-60" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="start"
+              className="w-80 max-h-[460px] overflow-y-auto p-1.5"
+            >
+              <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground border-b border-border/60 mb-1">
+                Select Model ({AVAILABLE_MODELS.length} available)
+              </div>
+
+              {providers.map((provider) => {
+                const models = AVAILABLE_MODELS.filter((m) => m.provider === provider);
+                if (models.length === 0) return null;
+
+                return (
+                  <div key={provider} className="py-1">
+                    <div className="px-2 py-1 text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80">
+                      {provider}
+                    </div>
+                    {models.map((m) => {
+                      const isSelected = m.id === currentModel.id;
+                      return (
+                        <DropdownMenuItem
+                          key={m.id}
+                          onClick={() => onModelChange?.(m.id)}
+                          className={`flex items-start justify-between p-2 rounded-lg gap-2 cursor-pointer ${
+                            isSelected ? "bg-primary/10 text-primary font-medium" : ""
+                          }`}
+                        >
+                          <div className="flex flex-col min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-xs font-semibold">{m.name}</span>
+                              {m.badge && (
+                                <span className="px-1.5 py-0.2 rounded text-[10px] bg-muted border border-border/60 text-muted-foreground">
+                                  {m.badge}
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-[11px] text-muted-foreground truncate leading-normal">
+                              {m.description}
+                            </span>
+                          </div>
+                          {isSelected && (
+                            <Check className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
+                          )}
+                        </DropdownMenuItem>
+                      );
+                    })}
+                    <DropdownMenuSeparator className="my-1" />
+                  </div>
+                );
+              })}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 

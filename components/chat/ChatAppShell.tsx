@@ -154,6 +154,7 @@ export function ChatAppShell({
         initialTitle={initialTitle}
         initialMessages={initialMessages}
         selectedModel={selectedModel}
+        onModelChange={handleModelChange}
         temperature={temperature}
         onToggleSidebar={() => setIsMobileSidebarOpen((prev) => !prev)}
         onNewChat={handleNewChat}

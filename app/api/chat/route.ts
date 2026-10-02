@@ -4,6 +4,7 @@ import { openai } from "@ai-sdk/openai";
 import { db } from "@/lib/db";
 import { getAuthUserId } from "@/lib/auth";
 import { DEFAULT_SYSTEM_PROMPT, cleanTitleFromMessage } from "@/lib/ai";
+import { generateContextualResponse } from "@/lib/conversationalResponder";
 
 export const maxDuration = 60;
 
@@ -107,10 +108,10 @@ export async function POST(req: NextRequest) {
       Boolean(process.env.OPENAI_API_KEY) &&
       !process.env.OPENAI_API_KEY?.includes("your_openai_api_key");
 
-    if (!hasLiveKey) {
-      // Stream an informative and interactive simulated response
-      const simulatedText = `### 👋 AI Assistant Response\n\nYou asked:\n> *"${userPrompt}"*\n\nHere is how this works in **AI Assistant**:\n\n* **Live Streaming:** Real-time progressive token generation is active.\n* **Markdown Support:** Full typography with bold text, bullet points, and code blocks.\n* **Syntax Highlighting:** Fenced code with language tags and copy button.\n\nHere is an example code snippet:\n\`\`\`typescript\n// Example TypeScript function\nexport function calculateFibonacci(n: number): number {\n  if (n <= 1) return n;\n  return calculateFibonacci(n - 1) + calculateFibonacci(n - 2);\n}\n\nconsole.log("Fibonacci(10):", calculateFibonacci(10));\n\`\`\`\n\n> 💡 **Connect OpenAI API:**\n> To receive live answers from **GPT-4o Mini** or **GPT-4o**, add your OpenAI API key in your \`.env\` file:\n>\`\`\`env\n>OPENAI_API_KEY=sk-your-actual-api-key-here\n>\`\`\`\n> Once added, all responses will be powered live by OpenAI!`;
+    const modelName = model || process.env.OPENAI_MODEL || "gpt-4o-mini";
 
+    if (!hasLiveKey) {
+      const simulatedText = generateContextualResponse(userPrompt, modelName);
       const stream = createSimulatedStream(simulatedText);
 
       // Persist assistant message if DB is connected
@@ -141,7 +142,6 @@ export async function POST(req: NextRequest) {
         content: m.content,
       }));
 
-    const modelName = model || process.env.OPENAI_MODEL || "gpt-4o-mini";
     const parsedTemp = typeof temperature === "number" ? Math.min(Math.max(temperature, 0), 2) : 0.7;
 
     const result = streamText({

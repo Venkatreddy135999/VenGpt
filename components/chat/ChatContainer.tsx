@@ -13,6 +13,7 @@ interface ChatContainerProps {
   initialTitle?: string;
   initialMessages?: MessageItem[];
   selectedModel: string;
+  onModelChange?: (model: string) => void;
   temperature: number;
   onToggleSidebar?: () => void;
   onNewChat: () => void;
@@ -25,6 +26,7 @@ export function ChatContainer({
   initialTitle = "New Conversation",
   initialMessages = [],
   selectedModel,
+  onModelChange,
   temperature,
   onToggleSidebar,
   onNewChat,
@@ -199,6 +201,7 @@ export function ChatContainer({
       <ChatHeader
         title={title}
         modelName={selectedModel}
+        onModelChange={onModelChange}
         onToggleSidebar={onToggleSidebar}
         onNewChat={onNewChat}
         onOpenSettings={onOpenSettings}
