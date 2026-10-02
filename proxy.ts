@@ -1,5 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher([
   "/",
@@ -8,16 +8,21 @@ const isPublicRoute = createRouteMatcher([
   "/api/health(.*)",
 ]);
 
-export default clerkMiddleware(async (auth, req) => {
-  // If Clerk keys are not configured, allow request through with dev warning header
-  if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
+let clerkHandler: any = null;
+if (process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && process.env.CLERK_SECRET_KEY) {
+  clerkHandler = clerkMiddleware(async (auth, req) => {
+    if (!isPublicRoute(req)) {
+      await auth.protect();
+    }
+  });
+}
+
+export default function proxy(req: NextRequest, event: any) {
+  if (!clerkHandler) {
     return NextResponse.next();
   }
-
-  if (!isPublicRoute(req)) {
-    await auth.protect();
-  }
-});
+  return clerkHandler(req, event);
+}
 
 export const config = {
   matcher: [
