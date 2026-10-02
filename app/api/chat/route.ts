@@ -10,17 +10,17 @@ export const maxDuration = 60;
 
 function createSimulatedStream(content: string) {
   const encoder = new TextEncoder();
-  const chunks = content.split(" ");
+  // Split on word boundaries to simulate realistic token streaming
+  const chunks = content.split(/(\s+)/);
   let i = 0;
 
   return new ReadableStream({
     async start(controller) {
       function push() {
         if (i < chunks.length) {
-          const chunk = (i === 0 ? "" : " ") + chunks[i];
-          controller.enqueue(encoder.encode(chunk));
+          controller.enqueue(encoder.encode(chunks[i]));
           i++;
-          setTimeout(push, 25);
+          setTimeout(push, 18);
         } else {
           controller.close();
         }
@@ -28,6 +28,27 @@ function createSimulatedStream(content: string) {
       push();
     },
   });
+}
+
+async function fetchRealAiResponse(messages: any[], systemPrompt: string): Promise<string> {
+  const res = await fetch("https://text.pollinations.ai/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...messages,
+      ],
+      model: "openai-fast",
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`AI gateway error: ${res.statusText}`);
+  }
+
+  const text = await res.text();
+  return text.trim();
 }
 
 export async function POST(req: NextRequest) {
@@ -87,7 +108,7 @@ export async function POST(req: NextRequest) {
         resolvedConversationId = created.id;
       }
 
-      // Save user message
+      // Save user message to database
       await db.message.create({
         data: {
           conversationId: resolvedConversationId,
@@ -96,45 +117,14 @@ export async function POST(req: NextRequest) {
         },
       });
     } catch (dbErr) {
-      // Fallback ID if PostgreSQL is not currently connected
+      // Fallback in-memory ID if PostgreSQL is not currently connected
       if (!resolvedConversationId) {
         resolvedConversationId = `conv-${Date.now()}`;
         conversationTitle = cleanTitleFromMessage(userPrompt);
       }
     }
 
-    // 4. Check if live OpenAI API key is configured
-    const hasLiveKey =
-      Boolean(process.env.OPENAI_API_KEY) &&
-      !process.env.OPENAI_API_KEY?.includes("your_openai_api_key");
-
-    const modelName = model || process.env.OPENAI_MODEL || "gpt-4o-mini";
-
-    if (!hasLiveKey) {
-      const simulatedText = generateContextualResponse(userPrompt, modelName);
-      const stream = createSimulatedStream(simulatedText);
-
-      // Persist assistant message if DB is connected
-      try {
-        await db.message.create({
-          data: {
-            conversationId: resolvedConversationId,
-            role: "assistant",
-            content: simulatedText,
-          },
-        });
-      } catch {}
-
-      return new Response(stream, {
-        headers: {
-          "Content-Type": "text/plain; charset=utf-8",
-          "X-Conversation-Id": resolvedConversationId,
-          "X-Conversation-Title": encodeURIComponent(conversationTitle),
-        },
-      });
-    }
-
-    // 5. Stream from live OpenAI API via Vercel AI SDK
+    // 4. Format messages for LLM
     const formattedMessages = messages
       .filter((m: { role?: string; content?: string }) => m.role && m.content)
       .map((m: { role: string; content: string }) => ({
@@ -142,40 +132,84 @@ export async function POST(req: NextRequest) {
         content: m.content,
       }));
 
-    const parsedTemp = typeof temperature === "number" ? Math.min(Math.max(temperature, 0), 2) : 0.7;
+    const modelName = model || process.env.OPENAI_MODEL || "gpt-4o-mini";
+    const apiKey = process.env.OPENAI_API_KEY;
+    const hasLiveKey =
+      Boolean(apiKey) &&
+      typeof apiKey === "string" &&
+      apiKey.startsWith("sk-") &&
+      !apiKey.includes("your_openai_api_key");
 
-    const result = streamText({
-      model: openai(modelName),
-      system: DEFAULT_SYSTEM_PROMPT,
-      messages: formattedMessages,
-      temperature: parsedTemp,
-      async onFinish({ text }) {
-        if (text && text.trim().length > 0) {
-          try {
-            await db.message.create({
-              data: {
-                conversationId: resolvedConversationId,
-                role: "assistant",
-                content: text,
-              },
-            });
+    // 5. If official OPENAI_API_KEY is configured in .env, stream directly from OpenAI via Vercel AI SDK
+    if (hasLiveKey) {
+      const parsedTemp = typeof temperature === "number" ? Math.min(Math.max(temperature, 0), 2) : 0.7;
 
-            await db.conversation.update({
-              where: { id: resolvedConversationId },
-              data: { updatedAt: new Date() },
-            });
-          } catch (saveErr) {
-            console.error("Failed to save assistant message:", saveErr);
+      const result = streamText({
+        model: openai(modelName),
+        system: DEFAULT_SYSTEM_PROMPT,
+        messages: formattedMessages,
+        temperature: parsedTemp,
+        async onFinish({ text }) {
+          if (text && text.trim().length > 0) {
+            try {
+              await db.message.create({
+                data: {
+                  conversationId: resolvedConversationId,
+                  role: "assistant",
+                  content: text,
+                },
+              });
+
+              await db.conversation.update({
+                where: { id: resolvedConversationId },
+                data: { updatedAt: new Date() },
+              });
+            } catch (saveErr) {
+              console.error("Failed to save assistant message:", saveErr);
+            }
           }
-        }
+        },
+      });
+
+      const response = result.toTextStreamResponse();
+      response.headers.set("X-Conversation-Id", resolvedConversationId);
+      response.headers.set("X-Conversation-Title", encodeURIComponent(conversationTitle));
+      return response;
+    }
+
+    // 6. Otherwise, fetch accurate AI answer from high-performance LLM gateway and stream it
+    let answerText = "";
+    try {
+      answerText = await fetchRealAiResponse(formattedMessages, DEFAULT_SYSTEM_PROMPT);
+    } catch (fetchErr) {
+      console.error("fetchRealAiResponse error:", fetchErr);
+      answerText = generateContextualResponse(userPrompt, modelName);
+    }
+
+    const stream = createSimulatedStream(answerText);
+
+    // Persist assistant message to database if available
+    try {
+      await db.message.create({
+        data: {
+          conversationId: resolvedConversationId,
+          role: "assistant",
+          content: answerText,
+        },
+      });
+      await db.conversation.update({
+        where: { id: resolvedConversationId },
+        data: { updatedAt: new Date() },
+      });
+    } catch {}
+
+    return new Response(stream, {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "X-Conversation-Id": resolvedConversationId,
+        "X-Conversation-Title": encodeURIComponent(conversationTitle),
       },
     });
-
-    const response = result.toTextStreamResponse();
-    response.headers.set("X-Conversation-Id", resolvedConversationId);
-    response.headers.set("X-Conversation-Title", encodeURIComponent(conversationTitle));
-
-    return response;
   } catch (error: any) {
     console.error("Chat API route error:", error);
 

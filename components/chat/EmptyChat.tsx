@@ -1,69 +1,63 @@
 "use client";
 
 import * as React from "react";
-import { Sparkles, Code2, GraduationCap, Lightbulb } from "lucide-react";
+import {
+  Code2,
+  Lightbulb,
+  FileText,
+  Compass,
+  Sparkles,
+} from "lucide-react";
 
 interface EmptyChatProps {
   onSelectPrompt: (prompt: string) => void;
 }
 
-const EXAMPLE_PROMPTS = [
+const QUICK_ACTIONS = [
   {
-    title: "Explain quantum computing simply",
-    subtitle: "Concepts explained with real-world analogies",
-    icon: Sparkles,
+    label: "Explain quantum computing",
+    prompt: "Explain quantum computing in simple terms.",
+    icon: Lightbulb,
   },
   {
-    title: "Write a Python program to sort a list",
-    subtitle: "Clean, documented, and idiomatic Python code",
+    label: "Write a Python script",
+    prompt: "Write an efficient Python function to sort a list with examples.",
     icon: Code2,
   },
   {
-    title: "Help me create a study plan",
-    subtitle: "Structured daily schedule for learning new skills",
-    icon: GraduationCap,
+    label: "Help me write",
+    prompt: "Help me write a professional follow-up email after a job interview.",
+    icon: FileText,
   },
   {
-    title: "Explain this concept step by step",
-    subtitle: "Deep-dive breakdown with clear milestones",
-    icon: Lightbulb,
+    label: "Brainstorm ideas",
+    prompt: "Give me 5 creative ideas for a full-stack web application.",
+    icon: Compass,
   },
 ];
 
 export function EmptyChat({ onSelectPrompt }: EmptyChatProps) {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-2xl mx-auto my-auto">
-      <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 text-primary shadow-xs">
-        <Sparkles className="h-6 w-6" />
+    <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 max-w-2xl mx-auto my-auto select-none">
+      <div className="h-10 w-10 rounded-full bg-foreground/5 dark:bg-white/10 flex items-center justify-center mb-5 text-foreground">
+        <Sparkles className="h-5 w-5" />
       </div>
 
-      <h2 className="text-2xl font-bold tracking-tight mb-2 text-foreground">
-        How can I help you today?
-      </h2>
-      <p className="text-sm text-muted-foreground mb-8 max-w-md">
-        Ask a question, generate code, brainstorm ideas, or analyze concepts. Choose a suggestion below or type your own prompt.
-      </p>
+      <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-8 text-foreground text-center">
+        What can I help with?
+      </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full text-left">
-        {EXAMPLE_PROMPTS.map((item, idx) => {
+      <div className="flex flex-wrap items-center justify-center gap-2 max-w-xl">
+        {QUICK_ACTIONS.map((item, idx) => {
           const Icon = item.icon;
           return (
             <button
               key={idx}
-              onClick={() => onSelectPrompt(item.title)}
-              className="group p-4 rounded-xl border border-border bg-card hover:bg-muted/60 hover:border-primary/40 transition-all text-left flex flex-col justify-between shadow-xs cursor-pointer active:scale-[0.99]"
+              onClick={() => onSelectPrompt(item.prompt)}
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full border border-border/80 bg-background hover:bg-muted/70 text-xs text-foreground/90 transition-all shadow-2xs hover:border-foreground/20 cursor-pointer active:scale-98"
             >
-              <div className="flex items-center gap-2.5 mb-1.5">
-                <div className="p-1.5 rounded-lg bg-muted group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                  <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
-                </div>
-                <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
-                  {item.title}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground pl-8">
-                {item.subtitle}
-              </p>
+              <Icon className="h-3.5 w-3.5 text-muted-foreground" />
+              <span>{item.label}</span>
             </button>
           );
         })}
