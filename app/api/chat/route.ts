@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { getAuthUserId } from "@/lib/auth";
 import { DEFAULT_SYSTEM_PROMPT, cleanTitleFromMessage } from "@/lib/ai";
 import { generateContextualResponse } from "@/lib/conversationalResponder";
+import { saveMemoryConversation, addMemoryMessage } from "@/lib/memoryStore";
 
 export const maxDuration = 60;
 
@@ -124,6 +125,10 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Always keep memoryStore synced
+    saveMemoryConversation(resolvedConversationId, userId, conversationTitle);
+    addMemoryMessage(resolvedConversationId, "user", userPrompt);
+
     // 4. Format messages for LLM
     const formattedMessages = messages
       .filter((m: { role?: string; content?: string }) => m.role && m.content)
@@ -202,6 +207,8 @@ export async function POST(req: NextRequest) {
         data: { updatedAt: new Date() },
       });
     } catch {}
+
+    addMemoryMessage(resolvedConversationId, "assistant", answerText);
 
     return new Response(stream, {
       headers: {
