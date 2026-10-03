@@ -9,11 +9,20 @@ A modern, high-performance, production-ready AI chatbot web application built wi
 **AI Assistant** is an intelligent conversational platform offering a ChatGPT-style interface with original, modern UI design. It supports:
 
 * **Real-time streaming responses**: Progressive token-by-token generation with typing indicator and instant abort/stop controls.
+* **Multi-Model Intelligence**: Dropdown selector supporting leading AI models across providers:
+  * **OpenAI**: GPT-4o, GPT-4o Mini, OpenAI o1, OpenAI o3-mini
+  * **DeepSeek**: DeepSeek R1 (Reasoning), DeepSeek V3, DeepSeek Coder
+  * **xAI**: Grok-2, Grok-2 Mini
+  * **Anthropic**: Claude 3.5 Sonnet, Claude 3.5 Haiku
+  * **Google**: Gemini 2.0 Flash, Gemini 1.5 Pro
+  * **Open Source / Astra**: Llama 3.3 70B, Mistral Large
+* **Curated Prompt Dataset & Library (300+ Prompts)**: Ingested community dataset (`prompts.csv`) with full modal browser categorized into Coding & Engineering, Writing & Content, Business & Career, Reasoning & Learning, Roleplay & Personas, and Creative & Lifestyle.
+* **Knowledge Base & RAG Grounding**: Integrated domain knowledge base (`data/knowledge-base.json`) automatically augmenting prompts with factual context for Next.js, Prisma, RAG architecture, System Design, and more.
 * **Markdown & Code Syntax Highlighting**: Fenced code blocks with language labels, one-click copy buttons, tables, blockquotes, lists, and headers.
 * **Full conversation history**: Automatic title generation based on initial prompts, searchable conversation threads, inline renaming, and safe deletion confirmation.
 * **Regeneration & Response Copy**: One-click regeneration of previous assistant replies and clipboard copying.
 * **Theme Customization**: Seamless Light, Dark, and System modes persisted via `next-themes`.
-* **AI Model Selection & Temperature Tuning**: Switch between models (e.g. `GPT-4o Mini`, `GPT-4o`, `GPT-4 Turbo`) and adjust creativity sliders in the Settings dialog.
+* **AI Model Selection & Temperature Tuning**: Switch models and adjust creativity sliders in the Settings dialog.
 * **Data Management**: Bulk clear conversation history with a double-confirmation modal.
 * **Secure Authentication**: Clerk-powered sign-up, sign-in, user avatar controls, and isolated per-user conversation data.
 * **Responsive Design**: Adapts effortlessly across mobile, tablet, and desktop with an accessible slide-out navigation drawer.
