@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Menu, Plus, Settings2, Sparkles, ChevronDown, Check, BookOpen } from "lucide-react";
+import { Menu, Plus, Settings2, Sparkles, ChevronDown, Check, BookOpen, Download, FileText, Code } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { AVAILABLE_MODELS, getModelById } from "@/lib/ai";
@@ -21,6 +21,8 @@ interface ChatHeaderProps {
   onNewChat: () => void;
   onOpenSettings: () => void;
   onOpenPromptLibrary?: () => void;
+  onExport?: (format: "markdown" | "json") => void;
+  hasMessages?: boolean;
 }
 
 export function ChatHeader({
@@ -31,6 +33,8 @@ export function ChatHeader({
   onNewChat,
   onOpenSettings,
   onOpenPromptLibrary,
+  onExport,
+  hasMessages = false,
 }: ChatHeaderProps) {
   const currentModel = getModelById(modelName);
 
@@ -145,13 +149,45 @@ export function ChatHeader({
       </div>
 
       <div className="flex items-center gap-1 shrink-0">
+        {onExport && hasMessages && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="iconSm"
+                title="Export Conversation"
+                aria-label="Export Conversation"
+                className="text-muted-foreground hover:text-foreground cursor-pointer"
+              >
+                <Download className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem
+                onClick={() => onExport("markdown")}
+                className="flex items-center gap-2 text-xs cursor-pointer"
+              >
+                <FileText className="h-3.5 w-3.5" />
+                <span>Export as Markdown (.md)</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => onExport("json")}
+                className="flex items-center gap-2 text-xs cursor-pointer"
+              >
+                <Code className="h-3.5 w-3.5" />
+                <span>Export as JSON (.json)</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+
         <Button
           variant="ghost"
           size="iconSm"
           onClick={onOpenPromptLibrary}
           title="Prompt Library & Datasets"
           aria-label="Open Prompt Library"
-          className="text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground cursor-pointer"
         >
           <BookOpen className="h-4 w-4" />
         </Button>
@@ -162,6 +198,7 @@ export function ChatHeader({
           onClick={onOpenSettings}
           title="Settings"
           aria-label="Open settings"
+          className="cursor-pointer"
         >
           <Settings2 className="h-4 w-4" />
         </Button>

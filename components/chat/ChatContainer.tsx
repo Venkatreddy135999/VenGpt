@@ -197,6 +197,50 @@ export function ChatContainer({
     await sendMessage(lastUserMessage.content);
   };
 
+  const handleExport = (format: "markdown" | "json") => {
+    if (messages.length === 0) return;
+    const sanitizedTitle = (title || "conversation")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+    const ext = format === "markdown" ? "md" : "json";
+    const filename = `${sanitizedTitle || "chat"}-${new Date().toISOString().slice(0, 10)}.${ext}`;
+    const mimeType = format === "markdown" ? "text/markdown;charset=utf-8" : "application/json;charset=utf-8";
+
+    let content = "";
+    if (format === "markdown") {
+      content = `# ${title || "AI Conversation"}\n\n` +
+        `*Exported on ${new Date().toLocaleString()}*\n\n---\n\n` +
+        messages
+          .map(
+            (m) =>
+              `### ${m.role === "user" ? "User" : "AI Assistant"}\n\n${m.content}\n\n---\n`
+          )
+          .join("\n");
+    } else {
+      content = JSON.stringify(
+        {
+          title,
+          exportedAt: new Date().toISOString(),
+          model: selectedModel,
+          messages,
+        },
+        null,
+        2
+      );
+    }
+
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="flex flex-col flex-1 h-screen overflow-hidden bg-background">
       {/* Header */}
@@ -208,6 +252,8 @@ export function ChatContainer({
         onNewChat={onNewChat}
         onOpenSettings={onOpenSettings}
         onOpenPromptLibrary={() => setIsPromptLibraryOpen(true)}
+        onExport={handleExport}
+        hasMessages={messages.length > 0}
       />
 
       {/* Error banner */}
