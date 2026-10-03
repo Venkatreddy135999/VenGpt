@@ -6,6 +6,7 @@ import { getAuthUserId } from "@/lib/auth";
 import { DEFAULT_SYSTEM_PROMPT, cleanTitleFromMessage } from "@/lib/ai";
 import { generateContextualResponse } from "@/lib/conversationalResponder";
 import { saveMemoryConversation, addMemoryMessage } from "@/lib/memoryStore";
+import { findRelevantKnowledge, formatKnowledgeContext } from "@/lib/dataset";
 
 export const maxDuration = 60;
 
@@ -145,13 +146,18 @@ export async function POST(req: NextRequest) {
       apiKey.startsWith("sk-") &&
       !apiKey.includes("your_openai_api_key");
 
+    // Retrieve relevant knowledge from dataset (RAG injection)
+    const relevantKnowledge = findRelevantKnowledge(userPrompt);
+    const knowledgeContext = formatKnowledgeContext(relevantKnowledge);
+    const effectiveSystemPrompt = `${DEFAULT_SYSTEM_PROMPT}${knowledgeContext}`;
+
     // 5. If official OPENAI_API_KEY is configured in .env, stream directly from OpenAI via Vercel AI SDK
     if (hasLiveKey) {
       const parsedTemp = typeof temperature === "number" ? Math.min(Math.max(temperature, 0), 2) : 0.7;
 
       const result = streamText({
         model: openai(modelName),
-        system: DEFAULT_SYSTEM_PROMPT,
+        system: effectiveSystemPrompt,
         messages: formattedMessages,
         temperature: parsedTemp,
         async onFinish({ text }) {
@@ -185,7 +191,7 @@ export async function POST(req: NextRequest) {
     // 6. Otherwise, fetch accurate AI answer from high-performance LLM gateway and stream it
     let answerText = "";
     try {
-      answerText = await fetchRealAiResponse(formattedMessages, DEFAULT_SYSTEM_PROMPT);
+      answerText = await fetchRealAiResponse(formattedMessages, effectiveSystemPrompt);
     } catch (fetchErr) {
       console.error("fetchRealAiResponse error:", fetchErr);
       answerText = generateContextualResponse(userPrompt, modelName);

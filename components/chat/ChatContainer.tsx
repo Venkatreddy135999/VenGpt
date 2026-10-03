@@ -6,6 +6,7 @@ import { ChatHeader } from "@/components/chat/ChatHeader";
 import { MessageList, MessageItem } from "@/components/chat/MessageList";
 import { MessageInput } from "@/components/chat/MessageInput";
 import { EmptyChat } from "@/components/chat/EmptyChat";
+import { PromptLibraryModal } from "@/components/chat/PromptLibraryModal";
 import { AlertCircle, X } from "lucide-react";
 
 interface ChatContainerProps {
@@ -40,6 +41,7 @@ export function ChatContainer({
   const [streamingContent, setStreamingContent] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
   const [title, setTitle] = React.useState(initialTitle);
+  const [isPromptLibraryOpen, setIsPromptLibraryOpen] = React.useState(false);
 
   const abortControllerRef = React.useRef<AbortController | null>(null);
   const activeConversationIdRef = React.useRef<string | undefined>(conversationId);
@@ -205,6 +207,7 @@ export function ChatContainer({
         onToggleSidebar={onToggleSidebar}
         onNewChat={onNewChat}
         onOpenSettings={onOpenSettings}
+        onOpenPromptLibrary={() => setIsPromptLibraryOpen(true)}
       />
 
       {/* Error banner */}
@@ -227,7 +230,10 @@ export function ChatContainer({
       {/* Main chat viewport */}
       <main className="flex-1 flex flex-col overflow-hidden relative">
         {messages.length === 0 && !isStreaming ? (
-          <EmptyChat onSelectPrompt={(prompt) => sendMessage(prompt)} />
+          <EmptyChat
+            onSelectPrompt={(prompt) => sendMessage(prompt)}
+            onOpenPromptLibrary={() => setIsPromptLibraryOpen(true)}
+          />
         ) : (
           <MessageList
             messages={messages}
@@ -246,6 +252,16 @@ export function ChatContainer({
         isStreaming={isStreaming}
         onStop={handleStop}
         disabled={isStreaming}
+        onOpenAttachment={() => setIsPromptLibraryOpen(true)}
+      />
+
+      {/* Prompt Library & Dataset Modal */}
+      <PromptLibraryModal
+        open={isPromptLibraryOpen}
+        onOpenChange={setIsPromptLibraryOpen}
+        onSelectPrompt={(selectedPrompt) => {
+          setInput(selectedPrompt);
+        }}
       />
     </div>
   );

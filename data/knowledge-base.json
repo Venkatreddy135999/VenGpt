@@ -1,0 +1,66 @@
+[
+  {
+    "id": "kb-001",
+    "category": "Web Development",
+    "topic": "Next.js App Router Architecture",
+    "keywords": ["nextjs", "next.js", "app router", "server components", "rsc", "hydration"],
+    "summary": "Next.js App Router leverages React Server Components (RSC) by default, rendering components on the server without shipping JavaScript to the client unless marked with 'use client'.",
+    "details": "Benefits include zero-bundle-size server components, streaming with Suspense, nested layouts, and server actions for type-safe mutations without manual API routes."
+  },
+  {
+    "id": "kb-002",
+    "category": "Artificial Intelligence",
+    "topic": "Retrieval-Augmented Generation (RAG)",
+    "keywords": ["rag", "retrieval", "embeddings", "vector database", "knowledge base"],
+    "summary": "RAG is an AI framework that retrieves relevant documents from external knowledge sources and passes them as context to a language model to generate grounded, factually accurate answers.",
+    "details": "RAG overcomes hallucinations, eliminates the need for expensive model retraining, and enables real-time access to private or proprietary datasets."
+  },
+  {
+    "id": "kb-003",
+    "category": "Databases & ORM",
+    "topic": "PostgreSQL & Prisma Indexing Optimization",
+    "keywords": ["postgres", "postgresql", "prisma", "indexing", "b-tree", "foreign key"],
+    "summary": "Proper indexing on foreign keys (e.g., conversationId in messages) and filter fields (e.g., clerkUserId in conversations) prevents costly sequential table scans.",
+    "details": "In Prisma schema, use @@index([clerkUserId]) and @@index([conversationId]) to ensure O(log n) lookups across millions of chat threads."
+  },
+  {
+    "id": "kb-004",
+    "category": "Computer Science",
+    "topic": "Quantum Computing Superposition & Entanglement",
+    "keywords": ["quantum", "qubit", "superposition", "entanglement", "quantum computing"],
+    "summary": "Quantum computers replace classical binary bits with qubits. Qubits can exist as linear combinations of |0⟩ and |1⟩ states simultaneously via superposition.",
+    "details": "Entanglement links pairs of qubits so that measuring one determines the state of the other. Quantum algorithms like Shor's and Grover's utilize quantum interference to amplify correct solution amplitudes."
+  },
+  {
+    "id": "kb-005",
+    "category": "System Design",
+    "topic": "Event-Driven Architecture & Message Queues",
+    "keywords": ["event-driven", "kafka", "rabbitmq", "pubsub", "message queue", "microservices"],
+    "summary": "Event-driven architecture decouples producers from consumers using asynchronous event streams, ensuring high scalability and fault tolerance.",
+    "details": "Key patterns include Event Sourcing (rebuilding state from sequential log), CQRS (separating read and write models), and Dead Letter Queues (handling unprocessable messages)."
+  },
+  {
+    "id": "kb-006",
+    "category": "Software Engineering",
+    "topic": "Clean Code & SOLID Principles",
+    "keywords": ["solid", "clean code", "single responsibility", "dependency inversion", "open closed"],
+    "summary": "SOLID principles guide robust object-oriented and modular system design: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion.",
+    "details": "Applying these principles reduces code coupling, enhances testability with unit mocks, and isolates changes to prevent cascading regressions."
+  },
+  {
+    "id": "kb-007",
+    "category": "Web Security",
+    "topic": "Modern Web Authentication & Zero Trust",
+    "keywords": ["authentication", "auth", "jwt", "oauth", "clerk", "session", "zero trust"],
+    "summary": "Modern authentication separates token issuance from token verification, using short-lived JWTs, secure HTTP-only cookies, and OAuth2/OIDC flows.",
+    "details": "Zero trust architecture requires continuous verification of user identity, request body validation, and tenant-level authorization checks on every database access."
+  },
+  {
+    "id": "kb-008",
+    "category": "Algorithms",
+    "topic": "QuickSort & Divide and Conquer",
+    "keywords": ["quicksort", "sorting", "divide and conquer", "algorithm", "complexity"],
+    "summary": "QuickSort partitions an array around a chosen pivot element, recursively sorting sub-arrays on either side of the pivot with average O(n log n) runtime.",
+    "details": "Best performance is achieved using median-of-three pivot selection or randomized pivots to prevent worst-case O(n^2) degradation on pre-sorted arrays."
+  }
+]

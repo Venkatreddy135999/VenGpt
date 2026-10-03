@@ -11,6 +11,7 @@ interface MessageInputProps {
   isStreaming: boolean;
   onStop: () => void;
   disabled?: boolean;
+  onOpenAttachment?: () => void;
 }
 
 export function MessageInput({
@@ -20,6 +21,7 @@ export function MessageInput({
   isStreaming,
   onStop,
   disabled = false,
+  onOpenAttachment,
 }: MessageInputProps) {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 

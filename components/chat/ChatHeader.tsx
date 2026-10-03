@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Menu, Plus, Settings2, Sparkles, ChevronDown, Check } from "lucide-react";
+import { Menu, Plus, Settings2, Sparkles, ChevronDown, Check, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { AVAILABLE_MODELS, getModelById } from "@/lib/ai";
@@ -20,6 +20,7 @@ interface ChatHeaderProps {
   onToggleSidebar?: () => void;
   onNewChat: () => void;
   onOpenSettings: () => void;
+  onOpenPromptLibrary?: () => void;
 }
 
 export function ChatHeader({
@@ -29,6 +30,7 @@ export function ChatHeader({
   onToggleSidebar,
   onNewChat,
   onOpenSettings,
+  onOpenPromptLibrary,
 }: ChatHeaderProps) {
   const currentModel = getModelById(modelName);
 
@@ -143,6 +145,16 @@ export function ChatHeader({
       </div>
 
       <div className="flex items-center gap-1 shrink-0">
+        <Button
+          variant="ghost"
+          size="iconSm"
+          onClick={onOpenPromptLibrary}
+          title="Prompt Library & Datasets"
+          aria-label="Open Prompt Library"
+          className="text-muted-foreground hover:text-foreground"
+        >
+          <BookOpen className="h-4 w-4" />
+        </Button>
         <ThemeToggle />
         <Button
           variant="ghost"

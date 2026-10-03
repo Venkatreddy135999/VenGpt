@@ -7,10 +7,12 @@ import {
   FileText,
   Compass,
   Sparkles,
+  BookOpen,
 } from "lucide-react";
 
 interface EmptyChatProps {
   onSelectPrompt: (prompt: string) => void;
+  onOpenPromptLibrary?: () => void;
 }
 
 const QUICK_ACTIONS = [
@@ -36,7 +38,7 @@ const QUICK_ACTIONS = [
   },
 ];
 
-export function EmptyChat({ onSelectPrompt }: EmptyChatProps) {
+export function EmptyChat({ onSelectPrompt, onOpenPromptLibrary }: EmptyChatProps) {
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 max-w-2xl mx-auto my-auto select-none">
       <div className="h-10 w-10 rounded-full bg-foreground/5 dark:bg-white/10 flex items-center justify-center mb-5 text-foreground">
@@ -48,6 +50,15 @@ export function EmptyChat({ onSelectPrompt }: EmptyChatProps) {
       </h1>
 
       <div className="flex flex-wrap items-center justify-center gap-2 max-w-xl">
+        {onOpenPromptLibrary && (
+          <button
+            onClick={onOpenPromptLibrary}
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full border border-primary/40 bg-primary/5 hover:bg-primary/10 text-xs font-medium text-foreground transition-all shadow-2xs cursor-pointer active:scale-98"
+          >
+            <BookOpen className="h-3.5 w-3.5 text-primary" />
+            <span>Explore 300+ Prompts & Roles</span>
+          </button>
+        )}
         {QUICK_ACTIONS.map((item, idx) => {
           const Icon = item.icon;
           return (
