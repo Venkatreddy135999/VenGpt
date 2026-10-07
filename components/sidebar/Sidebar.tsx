@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Plus, Bot, Settings, X } from "lucide-react";
+import { Plus, Settings, X, Sparkles, PanelLeft, SquarePen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConversationList } from "@/components/sidebar/ConversationList";
 import { ConversationItemData } from "@/components/sidebar/ConversationItem";
@@ -12,6 +12,8 @@ import { UserButton, SignedIn, SignedOut, SignInButton } from "@/components/auth
 interface SidebarProps {
   conversations: ConversationItemData[];
   activeId?: string;
+  isDesktopOpen?: boolean;
+  onToggleDesktop?: () => void;
   isOpenMobile: boolean;
   onCloseMobile: () => void;
   onNewChat: () => void;
@@ -23,6 +25,8 @@ interface SidebarProps {
 export function Sidebar({
   conversations,
   activeId,
+  isDesktopOpen = true,
+  onToggleDesktop,
   isOpenMobile,
   onCloseMobile,
   onNewChat,
@@ -31,46 +35,53 @@ export function Sidebar({
   onOpenSettings,
 }: SidebarProps) {
   const content = (
-    <div className="flex flex-col h-full bg-[hsl(var(--sidebar-bg))] border-r border-border w-72 shrink-0 select-none">
-      {/* Header / Brand */}
-      <div className="p-3 border-b border-border flex items-center justify-between">
+    <div className="flex flex-col h-full bg-[hsl(var(--sidebar-bg))] border-r border-border w-64 sm:w-68 shrink-0 select-none">
+      {/* Header / Brand & Top Actions matching ChatGPT */}
+      <div className="p-3 border-b border-border/50 flex items-center justify-between">
         <Link
           href="/"
-          className="flex items-center gap-2.5 font-bold text-foreground text-sm px-1 py-1 rounded-lg hover:opacity-85 transition-opacity"
+          className="flex items-center gap-2 font-bold text-foreground text-sm px-1 py-1 rounded-lg hover:opacity-85 transition-opacity"
         >
-          <div className="h-7 w-7 rounded-lg bg-foreground text-background flex items-center justify-center">
-            <Bot className="h-4 w-4" />
+          <div className="h-6 w-6 rounded-md bg-foreground text-background flex items-center justify-center">
+            <Sparkles className="h-3.5 w-3.5" />
           </div>
-          <span>AI Assistant</span>
+          <span className="font-bold tracking-tight text-sm">VenGPT</span>
         </Link>
 
-        {/* Mobile close button */}
-        <Button
-          variant="ghost"
-          size="iconSm"
-          onClick={onCloseMobile}
-          className="md:hidden"
-          aria-label="Close sidebar"
-        >
-          <X className="h-4 w-4" />
-        </Button>
+        <div className="flex items-center gap-0.5">
+          {/* New Chat icon button */}
+          <Button
+            variant="ghost"
+            size="iconSm"
+            onClick={() => {
+              onNewChat();
+              onCloseMobile();
+            }}
+            title="New chat"
+            aria-label="New chat"
+            className="text-muted-foreground hover:text-foreground cursor-pointer"
+          >
+            <SquarePen className="h-4 w-4" />
+          </Button>
+
+          {/* Desktop collapse sidebar / Mobile close */}
+          <Button
+            variant="ghost"
+            size="iconSm"
+            onClick={() => {
+              if (onToggleDesktop) onToggleDesktop();
+              onCloseMobile();
+            }}
+            title="Close sidebar"
+            aria-label="Close sidebar"
+            className="text-muted-foreground hover:text-foreground cursor-pointer"
+          >
+            <PanelLeft className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
-      {/* New Chat Button */}
-      <div className="p-3">
-        <Button
-          onClick={() => {
-            onNewChat();
-            onCloseMobile();
-          }}
-          className="w-full justify-start gap-2 shadow-xs bg-foreground text-background hover:opacity-90 font-medium text-xs h-9"
-        >
-          <Plus className="h-4 w-4" />
-          <span>New Chat</span>
-        </Button>
-      </div>
-
-      {/* Conversations List with Search */}
+      {/* Conversations List with Search and Temporal Grouping */}
       <ConversationList
         conversations={conversations}
         activeId={activeId}
@@ -80,27 +91,24 @@ export function Sidebar({
       />
 
       {/* Footer / Account / Settings */}
-      <div className="p-3 border-t border-border mt-auto bg-muted/20 flex items-center justify-between">
+      <div className="p-2.5 border-t border-border mt-auto bg-muted/20 flex items-center justify-between">
         <div className="flex items-center gap-2 min-w-0">
-          {/* Clerk authentication widget */}
-          <div className="shrink-0 flex items-center">
-            <SignedIn>
-              <UserButton
-                appearance={{
-                  elements: {
-                    userButtonAvatarBox: "h-7 w-7",
-                  },
-                }}
-              />
-            </SignedIn>
-            <SignedOut>
-              <SignInButton mode="modal">
-                <Button variant="outline" size="sm" className="text-xs h-7 px-2">
-                  Sign In
-                </Button>
-              </SignInButton>
-            </SignedOut>
-          </div>
+          <SignedIn>
+            <UserButton
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: "h-7 w-7",
+                },
+              }}
+            />
+          </SignedIn>
+          <SignedOut>
+            <SignInButton mode="modal">
+              <Button variant="outline" size="sm" className="text-xs h-7 px-2">
+                Sign In
+              </Button>
+            </SignInButton>
+          </SignedOut>
 
           <div className="truncate text-xs font-medium text-foreground">
             My Workspace
@@ -115,6 +123,7 @@ export function Sidebar({
             onClick={onOpenSettings}
             title="Settings"
             aria-label="Settings"
+            className="text-muted-foreground hover:text-foreground cursor-pointer"
           >
             <Settings className="h-4 w-4" />
           </Button>
@@ -125,10 +134,12 @@ export function Sidebar({
 
   return (
     <>
-      {/* Desktop static sidebar */}
-      <aside className="hidden md:block h-screen shrink-0">
-        {content}
-      </aside>
+      {/* Desktop collapsible sidebar */}
+      {isDesktopOpen && (
+        <aside className="hidden md:block h-screen shrink-0 animate-in slide-in-from-left-2 duration-150">
+          {content}
+        </aside>
+      )}
 
       {/* Mobile drawer with backdrop */}
       {isOpenMobile && (

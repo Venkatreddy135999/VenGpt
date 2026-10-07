@@ -62,5 +62,69 @@
     "keywords": ["quicksort", "sorting", "divide and conquer", "algorithm", "complexity"],
     "summary": "QuickSort partitions an array around a chosen pivot element, recursively sorting sub-arrays on either side of the pivot with average O(n log n) runtime.",
     "details": "Best performance is achieved using median-of-three pivot selection or randomized pivots to prevent worst-case O(n^2) degradation on pre-sorted arrays."
+  },
+  {
+    "id": "kb-009",
+    "category": "Sports & Cricket",
+    "topic": "ICC Men's Cricket World Cup Champions (1975-2023)",
+    "keywords": ["cricket", "world cup", "icc", "winner", "champions", "1975", "1983", "2011", "2019", "2023", "cricket world cup"],
+    "summary": "The ICC Men's Cricket World Cup winners: 1975 & 1979: West Indies; 1983: India; 1987: Australia; 1992: Pakistan; 1996: Sri Lanka; 1999, 2003, 2007: Australia; 2011: India; 2015: Australia; 2019: England; 2023: Australia. Australia leads with 6 titles; India & West Indies have 2 each.",
+    "details": "India won in 1983 (captain Kapil Dev defeating West Indies) and 2011 (captain MS Dhoni defeating Sri Lanka at Wankhede Stadium). Australia won a record 6 titles (1987, 1999, 2003, 2007, 2015, 2023)."
+  },
+  {
+    "id": "kb-010",
+    "category": "Sports & Cricket",
+    "topic": "2023 ICC Men's Cricket World Cup",
+    "keywords": ["2023 cricket world cup", "2023 world cup", "cwc 2023", "india vs australia final", "virat kohli", "mohammed shami", "travis head", "pat cummins"],
+    "summary": "The 2023 ICC Cricket World Cup took place in India from Oct 5 to Nov 19, 2023. Australia won the title, defeating undefeated India by 6 wickets in the final in Ahmedabad. Travis Head scored 137 in the final. Virat Kohli was Player of the Tournament (765 runs); Mohammed Shami took the most wickets (24).",
+    "details": "10 teams competed in 48 matches. India finished top of the group with 9/9 wins, defeated New Zealand in Semi-Final 1 (Mohammed Shami 7/57, Virat Kohli 117). Australia defeated South Africa in Semi-Final 2 and chased 241 in the final led by Travis Head's century."
+  },
+  {
+    "id": "kb-011",
+    "category": "Sports & Cricket",
+    "topic": "Cricket Rules, Formats & Key Terminology",
+    "keywords": ["cricket rules", "lbw", "dls", "duckworth lewis", "powerplay", "drs", "test cricket", "odi", "t20", "strike rate", "economy rate"],
+    "summary": "Cricket has three main international formats: Test (5 days, two innings each), ODI (One Day International, 50 overs per side), and T20 (Twenty20, 20 overs per side). Key rules include LBW (Leg Before Wicket), DRS (Decision Review System), DLS (Duckworth-Lewis-Stern rain method), and Powerplays (fielding restriction periods).",
+    "details": "In ODIs: Mandatory Powerplay 1 (overs 1-10, max 2 fielders outside 30-yard circle), Powerplay 2 (overs 11-40, max 4 outside), Powerplay 3 (overs 41-50, max 5 outside). Batting strike rate is runs scored per 100 balls; bowling economy is runs conceded per over."
+  },
+  {
+    "id": "kb-012",
+    "category": "Sports & Cricket",
+    "topic": "Cricket All-Time Legends & Historic Milestones",
+    "keywords": ["sachin tendulkar", "virat kohli", "rohit sharma", "ms dhoni", "ricky ponting", "brian lara", "shane warne", "muttiah muralitharan", "jasprit bumrah"],
+    "summary": "Sachin Tendulkar holds the world record for 100 international centuries and 18,426 ODI runs. Virat Kohli surpassed Tendulkar with 50 ODI centuries (80 international tons). Rohit Sharma has the highest individual ODI score (264 vs Sri Lanka) and 3 ODI double centuries. MS Dhoni is the only captain to win all three ICC white-ball trophies (2007 T20 WC, 2011 ODI WC, 2013 Champions Trophy).",
+    "details": "Muttiah Muralitharan took 800 Test wickets (world record); Shane Warne took 708 Test wickets. Brian Lara scored 400 not out in Tests. Jasprit Bumrah and Mohammed Shami are premier modern pace bowlers."
+  },
+  {
+    "id": "kb-013",
+    "category": "Data & Cricket",
+    "topic": "Cricket Relational Database Schema & Datasets",
+    "keywords": ["cricket schema", "cricket dataset", "cricket database", "cricket_world_cups", "cricket_world_cup_matches", "cricket_squads", "cricket_player_stats"],
+    "summary": "The Cricket dataset includes 6 primary relational tables: cricket_world_cups (tournaments from 1975 to 2023), cricket_world_cup_matches (all 48 matches of 2023 World Cup), cricket_squads (team rosters and roles), cricket_player_stats (career ODI/Test stats for top cricketers), icc_rankings (team rankings by format), and ipl_tournaments (IPL season history).",
+    "details": "Matches table tracks ID, Year, Date, Stage, Team 1, Team 2, Venue, Winner, Margin, Player of Match, and Host Team. The world cups table tracks Year, Host Country, Winner, Runners-Up, Player of Tournament, Top Run Scorer, Top Wicket Taker, Qualified Teams, and Matches Played."
+  },
+  {
+    "id": "kb-014",
+    "category": "Sports & Football",
+    "topic": "FIFA World Cup 2022 Qatar Records & Winners",
+    "keywords": ["2022 world cup", "fifa world cup", "football world cup", "argentina", "lionel messi", "kylian mbappe", "world cup 2022 winner"],
+    "summary": "Argentina won the 2022 FIFA World Cup in Qatar, defeating defending champions France 4-2 on penalties following an iconic 3-3 draw in the final at Lusail Stadium. Lionel Messi was awarded the Golden Ball (best player), Kylian Mbappé won the Golden Boot (8 goals, including a final hat-trick), and Emiliano Martínez won the Golden Glove.",
+    "details": "Croatia finished 3rd, defeating Morocco (4th). 64 matches were played across 8 stadiums in Qatar from November 20 to December 18, 2022."
+  },
+  {
+    "id": "kb-015",
+    "category": "Data & Football",
+    "topic": "Football World Cup Database Schema & Datasets",
+    "keywords": ["football schema", "world cup schema", "world_cups", "world_cup_groups", "world_cup_squads", "2022_world_cup_matches"],
+    "summary": "The Football World Cup dataset includes 4 relational tables: world_cups (historical tournaments, hosts, winners, goals scored), world_cup_groups (group stages, points, FIFA rankings), world_cup_squads (player rosters, positions, age, caps, goals, clubs), and 2022_world_cup_matches (all 64 tournament matches in Qatar with dates, stages, home/away teams, and host flags).",
+    "details": "The 2022_world_cup_matches table maps all 64 tournament fixtures from Match 1 (Qatar vs Ecuador) through Match 64 (Argentina vs France Final)."
+  },
+  {
+    "id": "kb-016",
+    "category": "Sports & Cricket",
+    "topic": "Indian Premier League (IPL) History & Records",
+    "keywords": ["ipl", "indian premier league", "csk", "mumbai indians", "rcb", "ipl winners", "orange cap", "purple cap"],
+    "summary": "The Indian Premier League (IPL) is the premier T20 franchise league. Mumbai Indians (MI) and Chennai Super Kings (CSK) lead with 5 titles each, followed by Kolkata Knight Riders (KKR) with 3 titles. Virat Kohli is the all-time highest run-scorer, and Yuzvendra Chahal is the leading wicket-taker.",
+    "details": "CSK won in 2010, 2011, 2018, 2021, 2023 under MS Dhoni. MI won in 2013, 2015, 2017, 2019, 2020 under Rohit Sharma. KKR won in 2012, 2014, and 2024 under Shreyas Iyer / Gautam Gambhir."
   }
 ]

@@ -1,0 +1,58 @@
+Table,Field,Description
+cricket_world_cups,Year,Year in which the ICC Men's Cricket World Cup took place
+cricket_world_cups,Host Country,Country or countries that hosted the tournament
+cricket_world_cups,Winner,Country that won the tournament
+cricket_world_cups,Runners-Up,Country that finished in second place
+cricket_world_cups,Player of Tournament,Player awarded the Player of the Tournament award
+cricket_world_cups,Top Run Scorer,Batsman who scored the most runs in the tournament
+cricket_world_cups,Top Wicket Taker,Bowler who took the most wickets in the tournament
+cricket_world_cups,Qualified Teams,Total number of participating national teams
+cricket_world_cups,Matches Played,Total number of matches played in the tournament
+cricket_world_cup_matches,ID,Unique identifier for the match
+cricket_world_cup_matches,Year,Year of the World Cup tournament
+cricket_world_cup_matches,Date,Date when the match was played (YYYY-MM-DD)
+cricket_world_cup_matches,Stage,Stage of the tournament (Group Stage, Semi-Final, Final)
+cricket_world_cup_matches,Team 1,First competing national team
+cricket_world_cup_matches,Team 2,Second competing national team
+cricket_world_cup_matches,Venue,Stadium and city where the match was played
+cricket_world_cup_matches,Winner,Team that won the match
+cricket_world_cup_matches,Margin,Victory margin in runs or wickets
+cricket_world_cup_matches,Player of Match,Player awarded Player of the Match
+cricket_world_cup_matches,Host Team,TRUE if the home/host country was playing in the match
+cricket_squads,ID,Unique identifier for the player squad entry
+cricket_squads,Team,National cricket team
+cricket_squads,Player,Full name of the cricketer
+cricket_squads,Role,Player role (Top-order Batter, Middle-order Batter, Wicketkeeper-Batter, All-rounder, Fast Bowler, Spin Bowler)
+cricket_squads,Batting Style,Right-hand bat or Left-hand bat
+cricket_squads,Bowling Style,Bowling classification (e.g. Right-arm fast, Slow left-arm orthodox, Right-arm leg break)
+cricket_squads,Age,Age of the player at tournament start
+cricket_squads,Matches,Total ODI matches played
+cricket_squads,Runs,Career ODI runs scored
+cricket_squads,Wickets,Career ODI wickets taken
+cricket_player_stats,Player ID,Unique identifier for the player
+cricket_player_stats,Player Name,Name of the cricketer
+cricket_player_stats,Format,Cricket format (Test, ODI, T20I, IPL)
+cricket_player_stats,Matches,Total matches played
+cricket_player_stats,Innings,Total innings batted
+cricket_player_stats,Runs,Total runs scored
+cricket_player_stats,Highest Score,Highest individual score in an innings
+cricket_player_stats,Batting Average,Batting average (Runs / Dismissals)
+cricket_player_stats,Strike Rate,Batting strike rate (Runs per 100 balls)
+cricket_player_stats,Centuries,Number of centuries (100+ runs)
+cricket_player_stats,Fifties,Number of half-centuries (50-99 runs)
+cricket_player_stats,Wickets,Total wickets taken
+cricket_player_stats,Best Bowling,Best bowling figures in an innings (e.g. 7/57)
+cricket_player_stats,Bowling Average,Bowling average (Runs conceded per wicket)
+cricket_player_stats,Economy,Bowling economy rate (Runs conceded per over)
+icc_rankings,Format,Format of ranking (Test, ODI, T20I)
+icc_rankings,Rank,Current official ICC ranking position (1-10)
+icc_rankings,Team,Country name
+icc_rankings,Rating,Official ICC team rating points
+icc_rankings,Points,Total weighted points accumulated
+ipl_tournaments,Year,Year of the Indian Premier League season
+ipl_tournaments,Host Country,Host country of the tournament
+ipl_tournaments,Winner,Franchise that won the IPL championship
+ipl_tournaments,Runners-Up,Franchise that finished runner-up
+ipl_tournaments,Orange Cap,Leading run scorer of the season
+ipl_tournaments,Purple Cap,Leading wicket taker of the season
+ipl_tournaments,MVP,Most Valuable Player of the season

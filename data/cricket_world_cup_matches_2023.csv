@@ -1,0 +1,49 @@
+ID,Year,Date,Stage,Team 1,Team 2,Venue,Winner,Margin,Player of Match,Host Team
+1,2023,2023-10-05,Group Stage,England,New Zealand,Ahmedabad,New Zealand,9 wickets,Rachin Ravindra,FALSE
+2,2023,2023-10-06,Group Stage,Pakistan,Netherlands,Hyderabad,Pakistan,81 runs,Saud Shakeel,FALSE
+3,2023,2023-10-07,Group Stage,Bangladesh,Afghanistan,Dharamsala,Bangladesh,6 wickets,Mehidy Hasan Miraz,FALSE
+4,2023,2023-10-07,Group Stage,South Africa,Sri Lanka,Delhi,South Africa,102 runs,Aiden Markram,FALSE
+5,2023,2023-10-08,Group Stage,India,Australia,Chennai,India,6 wickets,KL Rahul,TRUE
+6,2023,2023-10-09,Group Stage,New Zealand,Netherlands,Hyderabad,New Zealand,99 runs,Mitchell Santner,FALSE
+7,2023,2023-10-10,Group Stage,England,Bangladesh,Dharamsala,England,137 runs,Dawid Malan,FALSE
+8,2023,2023-10-10,Group Stage,Pakistan,Sri Lanka,Hyderabad,Pakistan,6 wickets,Mohammad Rizwan,FALSE
+9,2023,2023-10-11,Group Stage,India,Afghanistan,Delhi,India,8 wickets,Rohit Sharma,TRUE
+10,2023,2023-10-12,Group Stage,Australia,South Africa,Lucknow,South Africa,134 runs,Quinton de Kock,FALSE
+11,2023,2023-10-13,Group Stage,New Zealand,Bangladesh,Chennai,New Zealand,8 wickets,Lockie Ferguson,FALSE
+12,2023,2023-10-14,Group Stage,India,Pakistan,Ahmedabad,India,7 wickets,Jasprit Bumrah,TRUE
+13,2023,2023-10-15,Group Stage,England,Afghanistan,Delhi,Afghanistan,69 runs,Mujeeb Ur Rahman,FALSE
+14,2023,2023-10-16,Group Stage,Australia,Sri Lanka,Lucknow,Australia,5 wickets,Adam Zampa,FALSE
+15,2023,2023-10-17,Group Stage,South Africa,Netherlands,Dharamsala,Netherlands,38 runs,Scott Edwards,FALSE
+16,2023,2023-10-18,Group Stage,New Zealand,Afghanistan,Chennai,New Zealand,149 runs,Glenn Phillips,FALSE
+17,2023,2023-10-19,Group Stage,India,Bangladesh,Pune,India,7 wickets,Virat Kohli,TRUE
+18,2023,2023-10-20,Group Stage,Australia,Pakistan,Bengaluru,Australia,62 runs,David Warner,FALSE
+19,2023,2023-10-21,Group Stage,Netherlands,Sri Lanka,Lucknow,Sri Lanka,5 wickets,Sadeera Samarawickrama,FALSE
+20,2023,2023-10-21,Group Stage,England,South Africa,Mumbai,South Africa,229 runs,Heinrich Klaasen,FALSE
+21,2023,2023-10-22,Group Stage,India,New Zealand,Dharamsala,India,4 wickets,Mohammed Shami,TRUE
+22,2023,2023-10-23,Group Stage,Pakistan,Afghanistan,Chennai,Afghanistan,8 wickets,Ibrahim Zadran,FALSE
+23,2023,2023-10-24,Group Stage,South Africa,Bangladesh,Mumbai,South Africa,149 runs,Quinton de Kock,FALSE
+24,2023,2023-10-25,Group Stage,Australia,Netherlands,Delhi,Australia,309 runs,Glenn Maxwell,FALSE
+25,2023,2023-10-26,Group Stage,England,Sri Lanka,Bengaluru,Sri Lanka,8 wickets,Lahiru Kumara,FALSE
+26,2023,2023-10-27,Group Stage,Pakistan,South Africa,Chennai,South Africa,1 wicket,Tabraiz Shamsi,FALSE
+27,2023,2023-10-28,Group Stage,Australia,New Zealand,Dharamsala,Australia,5 runs,Travis Head,FALSE
+28,2023,2023-10-28,Group Stage,Netherlands,Bangladesh,Kolkata,Netherlands,87 runs,Paul van Meekeren,FALSE
+29,2023,2023-10-29,Group Stage,India,England,Lucknow,India,100 runs,Rohit Sharma,TRUE
+30,2023,2023-10-30,Group Stage,Afghanistan,Sri Lanka,Pune,Afghanistan,7 wickets,Fazalhaq Farooqi,FALSE
+31,2023,2023-10-31,Group Stage,Pakistan,Bangladesh,Kolkata,Pakistan,7 wickets,Fakhar Zaman,FALSE
+32,2023,2023-11-01,Group Stage,New Zealand,South Africa,Pune,South Africa,190 runs,Rassie van der Dussen,FALSE
+33,2023,2023-11-02,Group Stage,India,Sri Lanka,Mumbai,India,302 runs,Mohammed Shami,TRUE
+34,2023,2023-11-03,Group Stage,Netherlands,Afghanistan,Lucknow,Afghanistan,7 wickets,Mohammad Nabi,FALSE
+35,2023,2023-11-04,Group Stage,New Zealand,Pakistan,Bengaluru,Pakistan,21 runs (DLS),Fakhar Zaman,FALSE
+36,2023,2023-11-04,Group Stage,England,Australia,Ahmedabad,Australia,33 runs,Adam Zampa,FALSE
+37,2023,2023-11-05,Group Stage,India,South Africa,Kolkata,India,243 runs,Virat Kohli,TRUE
+38,2023,2023-11-06,Group Stage,Bangladesh,Sri Lanka,Delhi,Bangladesh,3 wickets,Shakib Al Hasan,FALSE
+39,2023,2023-11-07,Group Stage,Australia,Afghanistan,Mumbai,Australia,3 wickets,Glenn Maxwell,FALSE
+40,2023,2023-11-08,Group Stage,England,Netherlands,Pune,England,160 runs,Ben Stokes,FALSE
+41,2023,2023-11-09,Group Stage,New Zealand,Sri Lanka,Bengaluru,New Zealand,5 wickets,Trent Boult,FALSE
+42,2023,2023-11-10,Group Stage,South Africa,Afghanistan,Ahmedabad,South Africa,5 wickets,Rassie van der Dussen,FALSE
+43,2023,2023-11-11,Group Stage,Australia,Bangladesh,Pune,Australia,8 wickets,Mitchell Marsh,FALSE
+44,2023,2023-11-11,Group Stage,England,Pakistan,Kolkata,England,93 runs,David Willey,FALSE
+45,2023,2023-11-12,Group Stage,India,Netherlands,Bengaluru,India,160 runs,Shreyas Iyer,TRUE
+46,2023,2023-11-15,Semi-Final 1,India,New Zealand,Mumbai,India,70 runs,Mohammed Shami,TRUE
+47,2023,2023-11-16,Semi-Final 2,South Africa,Australia,Kolkata,Australia,3 wickets,Travis Head,FALSE
+48,2023,2023-11-19,Final,India,Australia,Ahmedabad,Australia,6 wickets,Travis Head,TRUE

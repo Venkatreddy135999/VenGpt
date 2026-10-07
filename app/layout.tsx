@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Assistant - Production AI Chatbot",
+  title: "VenGPT — Intelligent AI Assistant",
   description:
-    "A modern, production-ready AI chatbot application built with Next.js App Router, Vercel AI SDK, OpenAI, PostgreSQL, Prisma, and Clerk.",
+    "VenGPT is a ChatGPT-style conversational assistant with real-time intent detection, image generation, coding, and multi-tool routing.",
 };
 
 export default function RootLayout({

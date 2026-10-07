@@ -24,30 +24,37 @@ export interface PromptItem {
 export const KNOWLEDGE_DATASET: KnowledgeItem[] = knowledgeBase;
 export const PROMPT_DATASET: PromptItem[] = promptLibrary;
 
+const STOP_WORDS = new Set([
+  "the", "and", "for", "with", "that", "this", "from", "you", "are", "code",
+  "what", "how", "why", "when", "can", "please", "help", "about", "your",
+  "write", "give", "show", "tell", "make", "create", "need", "want", "like"
+]);
+
 /**
  * Searches the knowledge base dataset for items relevant to user prompt.
- * Scores matches based on keywords and topic overlap.
+ * Only triggers on specific high-confidence technical terms, ignoring common stop words.
  */
-export function findRelevantKnowledge(query: string, maxResults = 2): KnowledgeItem[] {
+export function findRelevantKnowledge(query: string, maxResults = 1): KnowledgeItem[] {
   if (!query || typeof query !== "string") return [];
 
-  const tokens = query.toLowerCase().split(/\W+/).filter(Boolean);
+  const tokens = query.toLowerCase().split(/\W+/).filter((t) => t.length > 2 && !STOP_WORDS.has(t));
   if (tokens.length === 0) return [];
 
   const scored = KNOWLEDGE_DATASET.map((item) => {
     let score = 0;
-    const itemTokens = [
-      ...item.keywords,
-      ...item.topic.toLowerCase().split(/\W+/),
-      ...item.category.toLowerCase().split(/\W+/),
-    ];
+    const itemKeywords = item.keywords.map((k) => k.toLowerCase());
+    const topicTokens = item.topic.toLowerCase().split(/\W+/).filter(Boolean);
+    const summaryTokens = item.summary.toLowerCase().split(/\W+/).filter(Boolean);
 
     for (const token of tokens) {
-      if (token.length < 3) continue;
-      for (const k of itemTokens) {
-        if (k.includes(token) || token.includes(k)) {
-          score += 1;
-        }
+      if (itemKeywords.some((k) => k.includes(token) || token.includes(k))) {
+        score += 3;
+      }
+      if (topicTokens.includes(token)) {
+        score += 2;
+      }
+      if (summaryTokens.includes(token)) {
+        score += 1;
       }
     }
 
@@ -55,24 +62,21 @@ export function findRelevantKnowledge(query: string, maxResults = 2): KnowledgeI
   });
 
   return scored
-    .filter((s) => s.score > 0)
+    .filter((s) => s.score >= 2)
     .sort((a, b) => b.score - a.score)
     .slice(0, maxResults)
     .map((s) => s.item);
 }
 
 /**
- * Formats retrieved dataset items into a clean context prompt for the AI.
+ * Formats retrieved dataset items into a concise context prompt for the AI.
  */
 export function formatKnowledgeContext(items: KnowledgeItem[]): string {
   if (items.length === 0) return "";
 
   const formatted = items
-    .map(
-      (item) =>
-        `### Knowledge Reference: ${item.topic} (${item.category})\n- Summary: ${item.summary}\n- Key Details: ${item.details}`
-    )
-    .join("\n\n");
+    .map((item) => `[Topic: ${item.topic}] ${item.summary}`)
+    .join(" ");
 
-  return `\n\n[Verified Dataset Context]:\n${formatted}\nUse the above verified facts to ground and enrich your answer if relevant.`;
+  return ` Note: ${formatted}`;
 }

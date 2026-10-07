@@ -7,41 +7,65 @@ import { DEFAULT_SYSTEM_PROMPT, cleanTitleFromMessage } from "@/lib/ai";
 import { generateContextualResponse } from "@/lib/conversationalResponder";
 import { saveMemoryConversation, addMemoryMessage } from "@/lib/memoryStore";
 import { findRelevantKnowledge, formatKnowledgeContext } from "@/lib/dataset";
+import { routeUserRequest } from "@/lib/requestRouter";
 
 export const maxDuration = 60;
 
 function createSimulatedStream(content: string) {
   const encoder = new TextEncoder();
-  // Split on word boundaries to simulate realistic token streaming
   const chunks = content.split(/(\s+)/);
   let i = 0;
+  let timer: NodeJS.Timeout | null = null;
 
   return new ReadableStream({
-    async start(controller) {
+    start(controller) {
       function push() {
         if (i < chunks.length) {
-          controller.enqueue(encoder.encode(chunks[i]));
-          i++;
-          setTimeout(push, 18);
+          try {
+            controller.enqueue(encoder.encode(chunks[i]));
+            i++;
+            timer = setTimeout(push, 15);
+          } catch {
+            // Client closed stream early
+          }
         } else {
-          controller.close();
+          try {
+            controller.close();
+          } catch {}
         }
       }
       push();
     },
+    cancel() {
+      if (timer) clearTimeout(timer);
+      i = chunks.length;
+    },
   });
 }
 
+function cleanAiOutput(rawText: string): string {
+  // Strip third-party ads or footers if present
+  let cleaned = rawText
+    .replace(/---\s*\n+\*?\*?Support Pollinations\.AI[\s\S]*$/gi, "")
+    .replace(/d\?\?,\s*\*?\*?Ad\*?\*?[\s\S]*$/gi, "")
+    .replace(/Powered by Pollinations[\s\S]*$/gi, "")
+    .trim();
+  return cleaned;
+}
+
 async function fetchRealAiResponse(messages: any[], systemPrompt: string): Promise<string> {
+  const recentMessages = messages.slice(-6);
   const res = await fetch("https://text.pollinations.ai/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    signal: AbortSignal.timeout(4500),
     body: JSON.stringify({
       messages: [
-        { role: "system", content: systemPrompt },
-        ...messages,
+        { role: "system", content: `${systemPrompt} Strict instruction: Provide 100% accurate, factual data. Never invent cricket records, statistics, or code. Do not include ads or promotional text.` },
+        ...recentMessages,
       ],
-      model: "openai-fast",
+      model: "openai",
+      reasoning: false,
     }),
   });
 
@@ -50,7 +74,10 @@ async function fetchRealAiResponse(messages: any[], systemPrompt: string): Promi
   }
 
   const text = await res.text();
-  return text.trim();
+  if (!text || text.includes("Payment Required") || text.includes("quota exceeded")) {
+    throw new Error("AI gateway returned payment/quota restriction");
+  }
+  return cleanAiOutput(text);
 }
 
 export async function POST(req: NextRequest) {
@@ -64,7 +91,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid JSON request body." }, { status: 400 });
     }
 
-    const { conversationId, messages, model, temperature } = body;
+    const { conversationId, messages, model, temperature, webSearch } = body;
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json(
@@ -188,13 +215,23 @@ export async function POST(req: NextRequest) {
       return response;
     }
 
-    // 6. Otherwise, fetch accurate AI answer from high-performance LLM gateway and stream it
-    let answerText = "";
-    try {
-      answerText = await fetchRealAiResponse(formattedMessages, effectiveSystemPrompt);
-    } catch (fetchErr) {
-      console.error("fetchRealAiResponse error:", fetchErr);
-      answerText = generateContextualResponse(userPrompt, modelName);
+    // 6. Central Request Router: Intent Detection -> Tool/Capability Execution -> Output Formatter
+    const priorHistory = formattedMessages.slice(0, -1);
+    const routed = await routeUserRequest(userPrompt, priorHistory, modelName, {
+      webSearch: Boolean(webSearch),
+    });
+    let answerText = routed.outputPayload;
+
+    // If request was general chat and no specific tool was triggered, attempt live LLM gateway
+    if (routed.intent === "general_conversation" && !routed.toolUsed) {
+      try {
+        const liveAi = await fetchRealAiResponse(formattedMessages, effectiveSystemPrompt);
+        if (liveAi && liveAi.length > 5) {
+          answerText = liveAi;
+        }
+      } catch {
+        // Keeps routed.outputPayload
+      }
     }
 
     const stream = createSimulatedStream(answerText);

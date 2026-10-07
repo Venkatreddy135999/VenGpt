@@ -16,6 +16,7 @@ interface ChatContainerProps {
   selectedModel: string;
   onModelChange?: (model: string) => void;
   temperature: number;
+  isSidebarOpen?: boolean;
   onToggleSidebar?: () => void;
   onNewChat: () => void;
   onOpenSettings: () => void;
@@ -29,6 +30,7 @@ export function ChatContainer({
   selectedModel,
   onModelChange,
   temperature,
+  isSidebarOpen = true,
   onToggleSidebar,
   onNewChat,
   onOpenSettings,
@@ -73,7 +75,7 @@ export function ChatContainer({
     setIsStreaming(false);
   };
 
-  const sendMessage = async (overridePrompt?: string) => {
+  const sendMessage = async (overridePrompt?: string, options?: { webSearch?: boolean }) => {
     const textToSend = (overridePrompt ?? input).trim();
     if (!textToSend || isStreaming) return;
 
@@ -107,11 +109,12 @@ export function ChatContainer({
           })),
           model: selectedModel,
           temperature,
+          webSearch: options?.webSearch,
         }),
       });
 
       if (!response.ok) {
-        let errMessage = "Failed to communicate with AI Assistant.";
+        let errMessage = "Failed to communicate with VenGPT.";
         try {
           const errData = await response.json();
           if (errData?.error) errMessage = errData.error;
@@ -209,12 +212,12 @@ export function ChatContainer({
 
     let content = "";
     if (format === "markdown") {
-      content = `# ${title || "AI Conversation"}\n\n` +
+      content = `# ${title || "VenGPT Conversation"}\n\n` +
         `*Exported on ${new Date().toLocaleString()}*\n\n---\n\n` +
         messages
           .map(
             (m) =>
-              `### ${m.role === "user" ? "User" : "AI Assistant"}\n\n${m.content}\n\n---\n`
+              `### ${m.role === "user" ? "User" : "VenGPT"}\n\n${m.content}\n\n---\n`
           )
           .join("\n");
     } else {
@@ -248,6 +251,7 @@ export function ChatContainer({
         title={title}
         modelName={selectedModel}
         onModelChange={onModelChange}
+        isSidebarOpen={isSidebarOpen}
         onToggleSidebar={onToggleSidebar}
         onNewChat={onNewChat}
         onOpenSettings={onOpenSettings}
@@ -294,7 +298,7 @@ export function ChatContainer({
       <MessageInput
         input={input}
         setInput={setInput}
-        onSubmit={() => sendMessage()}
+        onSubmit={(opts) => sendMessage(undefined, opts)}
         isStreaming={isStreaming}
         onStop={handleStop}
         disabled={isStreaming}

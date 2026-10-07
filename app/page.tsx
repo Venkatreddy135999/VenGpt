@@ -24,9 +24,9 @@ export default async function LandingPage() {
       <header className="h-16 border-b border-border px-4 sm:px-8 flex items-center justify-between sticky top-0 bg-background/80 backdrop-blur-md z-30">
         <Link href="/" className="flex items-center gap-2.5 font-bold text-base">
           <div className="h-8 w-8 rounded-xl bg-foreground text-background flex items-center justify-center shadow-xs">
-            <Bot className="h-5 w-5" />
+            <Sparkles className="h-4.5 w-4.5" />
           </div>
-          <span>AI Assistant</span>
+          <span className="font-extrabold text-lg tracking-tight">VenGPT</span>
         </Link>
 
         <div className="flex items-center gap-3">
@@ -50,7 +50,7 @@ export default async function LandingPage() {
             </SignInButton>
             <Link href="/chat">
               <Button size="sm" className="gap-1.5 text-xs shadow-xs">
-                <span>Get Started</span>
+                <span>Try VenGPT</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </Link>
@@ -62,16 +62,16 @@ export default async function LandingPage() {
       <section className="flex-1 flex flex-col items-center justify-center text-center px-4 py-16 sm:py-24 max-w-5xl mx-auto">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border border-border bg-muted/60 text-muted-foreground mb-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
           <Sparkles className="h-3.5 w-3.5 text-primary" />
-          <span>Production-Ready AI Chatbot Experience</span>
+          <span>Next-Generation ChatGPT Experience</span>
         </div>
 
         <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-foreground max-w-3xl leading-[1.15] mb-6">
-          Conversations powered by intelligence and speed
+          Meet VenGPT — Intelligence, Creativity & Speed
         </h1>
 
         <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mb-10 leading-relaxed">
-          Experience ultra-responsive streaming AI responses, seamless conversation history,
-          rich markdown formatting with syntax-highlighted code, and secure cloud sync.
+          Experience ChatGPT-style intelligence with automatic intent detection, real-time image generation,
+          accurate sports records, clean code synthesis, and multi-capability routing.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
@@ -230,8 +230,8 @@ export default async function LandingPage() {
       <footer className="border-t border-border py-8 px-4 sm:px-8 text-center text-xs text-muted-foreground">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Bot className="h-4 w-4" />
-            <span className="font-semibold text-foreground">AI Assistant</span>
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span className="font-semibold text-foreground">VenGPT</span>
             <span>&copy; {new Date().getFullYear()}</span>
           </div>
           <div className="flex items-center gap-4 text-xs">

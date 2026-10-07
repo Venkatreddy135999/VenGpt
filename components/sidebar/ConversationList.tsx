@@ -24,6 +24,41 @@ interface ConversationListProps {
   onSelect?: () => void;
 }
 
+function groupConversationsByDate(conversations: ConversationItemData[]) {
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const startOfYesterday = startOfToday - 86400000;
+  const startOf7Days = startOfToday - 6 * 86400000;
+  const startOf30Days = startOfToday - 29 * 86400000;
+
+  const groups: { [key: string]: ConversationItemData[] } = {
+    Today: [],
+    Yesterday: [],
+    "Previous 7 Days": [],
+    "Previous 30 Days": [],
+    Older: [],
+  };
+
+  for (const item of conversations) {
+    const rawTime = item.updatedAt || item.createdAt;
+    const time = rawTime ? new Date(rawTime).getTime() : startOfToday;
+
+    if (isNaN(time) || time >= startOfToday) {
+      groups["Today"].push(item);
+    } else if (time >= startOfYesterday) {
+      groups["Yesterday"].push(item);
+    } else if (time >= startOf7Days) {
+      groups["Previous 7 Days"].push(item);
+    } else if (time >= startOf30Days) {
+      groups["Previous 30 Days"].push(item);
+    } else {
+      groups["Older"].push(item);
+    }
+  }
+
+  return groups;
+}
+
 export function ConversationList({
   conversations,
   activeId,
@@ -43,6 +78,11 @@ export function ConversationList({
     );
   }, [conversations, searchQuery]);
 
+  const temporalGroups = React.useMemo(() => {
+    if (searchQuery.trim()) return null;
+    return groupConversationsByDate(conversations);
+  }, [conversations, searchQuery]);
+
   const confirmDelete = async () => {
     if (!deleteTargetId) return;
     setIsDeleting(true);
@@ -59,7 +99,7 @@ export function ConversationList({
   const targetConversation = conversations.find((c) => c.id === deleteTargetId);
 
   return (
-    <div className="flex flex-col flex-1 overflow-hidden">
+    <div className="flex flex-col flex-1 overflow-hidden select-none">
       {/* Search Bar */}
       <div className="px-3 pb-2 pt-1">
         <div className="relative flex items-center">
@@ -83,7 +123,32 @@ export function ConversationList({
               {searchQuery ? "No matching conversations found." : "No conversations yet."}
             </p>
           </div>
+        ) : temporalGroups ? (
+          /* ChatGPT Temporal Grouping (Today, Yesterday, Previous 7 Days, etc.) */
+          Object.entries(temporalGroups).map(([groupTitle, items]) => {
+            if (items.length === 0) return null;
+            return (
+              <div key={groupTitle} className="mb-3">
+                <div className="px-2 pt-2.5 pb-1 text-[11px] font-semibold text-muted-foreground/70 uppercase tracking-wider">
+                  {groupTitle}
+                </div>
+                <div className="space-y-0.5">
+                  {items.map((item) => (
+                    <ConversationItem
+                      key={item.id}
+                      conversation={item}
+                      isActive={item.id === activeId}
+                      onRename={onRename}
+                      onDelete={(id) => setDeleteTargetId(id)}
+                      onSelect={onSelect}
+                    />
+                  ))}
+                </div>
+              </div>
+            );
+          })
         ) : (
+          /* Flat list during active search filtering */
           filtered.map((item) => (
             <ConversationItem
               key={item.id}

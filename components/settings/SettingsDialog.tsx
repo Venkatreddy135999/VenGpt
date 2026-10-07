@@ -23,6 +23,7 @@ import {
   User,
   AlertTriangle,
   LogOut,
+  Sparkles,
 } from "lucide-react";
 import { SignOutButton, useUser } from "@/components/auth/AuthControls";
 
@@ -79,7 +80,8 @@ export function SettingsDialog({
         <DialogContent className="sm:max-w-[550px] p-0 overflow-hidden">
           <div className="flex border-b border-border">
             <div className="p-4 flex items-center gap-2">
-              <span className="font-semibold text-base">Settings</span>
+              <Sparkles className="h-4.5 w-4.5 text-primary" />
+              <span className="font-semibold text-base">VenGPT Settings</span>
             </div>
           </div>
 

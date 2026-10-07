@@ -21,6 +21,7 @@ export function ChatAppShell({
 }: ChatAppShellProps) {
   const router = useRouter();
   const [conversations, setConversations] = React.useState<ConversationItemData[]>([]);
+  const [isDesktopSidebarOpen, setIsDesktopSidebarOpen] = React.useState(true);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = React.useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
   const [selectedModel, setSelectedModel] = React.useState("gpt-4o-mini");
@@ -33,10 +34,32 @@ export function ChatAppShell({
       if (savedModel) setSelectedModel(savedModel);
       const savedTemp = localStorage.getItem("ai_assistant_temp");
       if (savedTemp) setTemperature(parseFloat(savedTemp));
+      const savedSidebar = localStorage.getItem("vengpt_sidebar_open");
+      if (savedSidebar !== null) {
+        setIsDesktopSidebarOpen(savedSidebar === "true");
+      }
     } catch {
       // storage unavailable
     }
   }, []);
+
+  const handleToggleDesktopSidebar = () => {
+    setIsDesktopSidebarOpen((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem("vengpt_sidebar_open", next ? "true" : "false");
+      } catch {}
+      return next;
+    });
+  };
+
+  const handleToggleSidebar = () => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setIsMobileSidebarOpen((prev) => !prev);
+    } else {
+      handleToggleDesktopSidebar();
+    }
+  };
 
   const handleModelChange = (model: string) => {
     setSelectedModel(model);
@@ -136,10 +159,12 @@ export function ChatAppShell({
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-background">
-      {/* Sidebar (Desktop and Mobile drawer) */}
+      {/* Sidebar (Collapsible Desktop and Mobile drawer) */}
       <Sidebar
         conversations={conversations}
         activeId={conversationId}
+        isDesktopOpen={isDesktopSidebarOpen}
+        onToggleDesktop={handleToggleDesktopSidebar}
         isOpenMobile={isMobileSidebarOpen}
         onCloseMobile={() => setIsMobileSidebarOpen(false)}
         onNewChat={handleNewChat}
@@ -156,7 +181,8 @@ export function ChatAppShell({
         selectedModel={selectedModel}
         onModelChange={handleModelChange}
         temperature={temperature}
-        onToggleSidebar={() => setIsMobileSidebarOpen((prev) => !prev)}
+        isSidebarOpen={isDesktopSidebarOpen}
+        onToggleSidebar={handleToggleSidebar}
         onNewChat={handleNewChat}
         onOpenSettings={() => setIsSettingsOpen(true)}
         onConversationCreated={handleConversationCreated}

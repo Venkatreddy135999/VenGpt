@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { MessageSquare, MoreHorizontal, Pencil, Trash2, Check, X } from "lucide-react";
+import { MessageSquare, MoreHorizontal, Pencil, Trash2, Check, X, Share2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -136,9 +136,21 @@ export function ConversationItem({
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
+                if (typeof window !== "undefined") {
+                  navigator.clipboard.writeText(`${window.location.origin}/chat/${conversation.id}`);
+                }
+              }}
+              className="gap-2 text-xs cursor-pointer"
+            >
+              <Share2 className="h-3.5 w-3.5" />
+              <span>Share</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
                 setIsEditing(true);
               }}
-              className="gap-2 text-xs"
+              className="gap-2 text-xs cursor-pointer"
             >
               <Pencil className="h-3.5 w-3.5" />
               <span>Rename</span>
@@ -148,7 +160,7 @@ export function ConversationItem({
                 e.stopPropagation();
                 onDelete(conversation.id);
               }}
-              className="gap-2 text-xs text-destructive focus:text-destructive"
+              className="gap-2 text-xs text-destructive focus:text-destructive cursor-pointer"
             >
               <Trash2 className="h-3.5 w-3.5" />
               <span>Delete</span>

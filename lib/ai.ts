@@ -1,5 +1,5 @@
 export const DEFAULT_SYSTEM_PROMPT =
-  "You are AI Assistant, a helpful, accurate, and friendly AI assistant. Answer questions clearly and concisely. Explain difficult concepts step by step when useful. Do not invent facts. If you are uncertain, clearly state your uncertainty. Use Markdown formatting when it improves readability. When providing code, use appropriate fenced code blocks with the programming language specified.";
+  "You are VenGPT, an intelligent, articulate, and accurate AI assistant designed with modern ChatGPT-style reasoning and capability routing. Answer questions clearly and concisely. Explain difficult concepts step by step when useful. Never hallucinate facts. Use Markdown formatting when it improves readability. When providing code, use appropriate fenced code blocks with the programming language specified.";
 
 export interface ModelOption {
   id: string;
@@ -10,38 +10,38 @@ export interface ModelOption {
 }
 
 export const AVAILABLE_MODELS: ModelOption[] = [
-  // OpenAI Models
+  // VenGPT / OpenAI Models
   {
     id: "gpt-4o",
-    name: "GPT-4o",
+    name: "VenGPT 4o",
     provider: "OpenAI",
     description: "Flagship omni-model for complex reasoning, math, and code",
     badge: "Flagship",
   },
   {
     id: "gpt-4o-mini",
-    name: "GPT-4o Mini",
+    name: "VenGPT 4o Mini",
     provider: "OpenAI",
     description: "Fast, intelligent, and cost-efficient for everyday tasks",
     badge: "Fast",
   },
   {
     id: "o1",
-    name: "OpenAI o1",
+    name: "VenGPT o1",
     provider: "OpenAI",
     description: "Breakthrough reasoning model for deep science, coding, and math",
     badge: "Reasoning",
   },
   {
     id: "o1-mini",
-    name: "OpenAI o1-mini",
+    name: "VenGPT o1 Mini",
     provider: "OpenAI",
     description: "Fast reasoning model tailored for math and coding problem solving",
     badge: "Reasoning",
   },
   {
     id: "o3-mini",
-    name: "OpenAI o3-mini",
+    name: "VenGPT o3 Mini",
     provider: "OpenAI",
     description: "Next-generation high-efficiency reasoning model",
     badge: "New",
