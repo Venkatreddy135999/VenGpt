@@ -9,6 +9,8 @@ interface ConversationPageProps {
   }>;
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function ConversationPage({ params }: ConversationPageProps) {
   const { conversationId } = await params;
   const userId = (await getAuthUserId()) || "dev_user_local";

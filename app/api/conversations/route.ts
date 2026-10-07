@@ -7,6 +7,8 @@ import {
   clearMemoryConversations,
 } from "@/lib/memoryStore";
 
+export const dynamic = "force-dynamic";
+
 // GET /api/conversations - List all conversations for authenticated user
 export async function GET() {
   try {

@@ -13,6 +13,8 @@ interface RouteParams {
   }>;
 }
 
+export const dynamic = "force-dynamic";
+
 // GET /api/conversations/[conversationId]
 export async function GET(req: NextRequest, { params }: RouteParams) {
   try {
