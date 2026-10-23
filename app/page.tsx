@@ -43,14 +43,14 @@ export default async function LandingPage() {
           </SignedIn>
 
           <SignedOut>
-            <SignInButton mode="modal">
-              <Button variant="ghost" size="sm" className="text-xs">
-                Sign In
+            <Link href="/sign-in">
+              <Button variant="ghost" size="sm" className="text-xs font-medium">
+                Log in
               </Button>
-            </SignInButton>
-            <Link href="/chat">
-              <Button size="sm" className="gap-1.5 text-xs shadow-xs">
-                <span>Try VenGPT</span>
+            </Link>
+            <Link href="/sign-up">
+              <Button size="sm" className="gap-1.5 text-xs shadow-xs font-medium bg-[#10a37f] hover:bg-[#0e8c6d] text-white">
+                <span>Sign up</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </Link>
@@ -82,15 +82,15 @@ export default async function LandingPage() {
             </Button>
           </Link>
           {!isAuthenticated && (
-            <SignInButton mode="modal">
+            <Link href="/sign-in" className="w-full sm:w-auto">
               <Button
                 variant="outline"
                 size="lg"
                 className="w-full sm:w-auto text-sm font-medium h-12 px-6"
               >
-                Sign In to Account
+                Log in to Account
               </Button>
-            </SignInButton>
+            </Link>
           )}
         </div>
 

@@ -10,6 +10,7 @@ import {
   Lightbulb,
   Sparkles,
   BookOpen,
+  Database,
 } from "lucide-react";
 
 interface EmptyChatProps {
@@ -24,6 +25,13 @@ const CHATGPT_SUGGESTIONS = [
     prompt: "Generate a futuristic city at night.",
     icon: ImageIcon,
     color: "text-purple-500 bg-purple-500/10",
+  },
+  {
+    category: "RAG & Architecture",
+    label: "Next.js App Router & RAG",
+    prompt: "Explain Next.js App Router Architecture and how RAG works.",
+    icon: Database,
+    color: "text-teal-500 bg-teal-500/10",
   },
   {
     category: "Coding",

@@ -7,6 +7,7 @@ import { DEFAULT_SYSTEM_PROMPT, cleanTitleFromMessage } from "@/lib/ai";
 import { generateContextualResponse } from "@/lib/conversationalResponder";
 import { saveMemoryConversation, addMemoryMessage } from "@/lib/memoryStore";
 import { findRelevantKnowledge, formatKnowledgeContext } from "@/lib/dataset";
+import { buildRAGContext } from "@/lib/rag/ragEngine";
 import { routeUserRequest } from "@/lib/requestRouter";
 
 export const maxDuration = 60;
@@ -173,10 +174,11 @@ export async function POST(req: NextRequest) {
       apiKey.startsWith("sk-") &&
       !apiKey.includes("your_openai_api_key");
 
-    // Retrieve relevant knowledge from dataset (RAG injection)
+    // Retrieve relevant knowledge from dataset (RAG Grounding)
+    const ragContext = buildRAGContext(userPrompt);
     const relevantKnowledge = findRelevantKnowledge(userPrompt);
     const knowledgeContext = formatKnowledgeContext(relevantKnowledge);
-    const effectiveSystemPrompt = `${DEFAULT_SYSTEM_PROMPT}${knowledgeContext}`;
+    const effectiveSystemPrompt = `${DEFAULT_SYSTEM_PROMPT}${knowledgeContext}${ragContext}`;
 
     // 5. If official OPENAI_API_KEY is configured in .env, stream directly from OpenAI via Vercel AI SDK
     if (hasLiveKey) {

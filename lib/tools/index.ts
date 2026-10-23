@@ -5,6 +5,7 @@ import { CurrentInfoTool } from "./CurrentInfoTool";
 import { CodingTool } from "./CodingTool";
 import { ContextualFollowupTool } from "./ContextualFollowupTool";
 import { TextRewriterTool, SummarizerTool, ExplanationTool } from "./TextTools";
+import { RAGKnowledgeTool } from "./RAGKnowledgeTool";
 
 export * from "./types";
 export * from "./ImageGenerationTool";
@@ -13,6 +14,7 @@ export * from "./CurrentInfoTool";
 export * from "./CodingTool";
 export * from "./ContextualFollowupTool";
 export * from "./TextTools";
+export * from "./RAGKnowledgeTool";
 
 // Instantiated tool registry
 export const REGISTERED_TOOLS: AITool[] = [
@@ -20,6 +22,7 @@ export const REGISTERED_TOOLS: AITool[] = [
   new ImageGenerationTool(),
   new CalculatorTool(),
   new CurrentInfoTool(),
+  new RAGKnowledgeTool(),
   new CodingTool(),
   new ExplanationTool(),
   new TextRewriterTool(),

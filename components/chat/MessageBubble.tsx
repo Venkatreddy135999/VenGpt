@@ -14,6 +14,7 @@ import {
   ThumbsDown,
   Volume2,
   VolumeX,
+  Sparkles,
 } from "lucide-react";
 import { CodeBlock } from "@/components/chat/CodeBlock";
 import { cn } from "@/lib/utils";
@@ -201,6 +202,12 @@ export function MessageBubble({
         ) : (
           /* AI Text Message - ChatGPT Clean Prose Layout */
           <div className="w-full text-foreground text-[15px] font-normal leading-relaxed break-words">
+            {!isUser && (content.includes("Grounded Source:") || content.includes("RAG VERIFIED") || content.includes("Verified Information") || content.includes("ICC Official Records")) && (
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 mb-2.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 select-none">
+                <Sparkles className="h-3 w-3" />
+                <span>RAG Grounded Intelligence</span>
+              </div>
+            )}
             <div className="prose dark:prose-invert max-w-none">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
