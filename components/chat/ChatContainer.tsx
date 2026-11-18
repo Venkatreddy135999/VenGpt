@@ -97,9 +97,17 @@ export function ChatContainer({
     abortControllerRef.current = controller;
 
     try {
+      const customKey =
+        typeof window !== "undefined"
+          ? localStorage.getItem("vengpt_custom_api_key") || undefined
+          : undefined;
+
       const response = await fetch("/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(customKey ? { "x-api-key": customKey } : {}),
+        },
         signal: controller.signal,
         body: JSON.stringify({
           conversationId: activeConversationIdRef.current,
@@ -110,6 +118,7 @@ export function ChatContainer({
           model: selectedModel,
           temperature,
           webSearch: options?.webSearch,
+          apiKey: customKey,
         }),
       });
 

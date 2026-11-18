@@ -80,7 +80,7 @@ export async function routeUserRequest(
   }
 
   // 3. Fallback to High-Quality Contextual LLM Responder (No Generic Fallbacks!)
-  const fallbackText = generateContextualResponse(prompt, modelId);
+  const fallbackText = generateContextualResponse(prompt, modelId, conversationHistory);
 
   return {
     intent: intentResult.intent,

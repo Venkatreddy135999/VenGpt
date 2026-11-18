@@ -50,6 +50,24 @@ export function SettingsDialog({
   const [activeTab, setActiveTab] = React.useState<"appearance" | "ai" | "data" | "account">("appearance");
   const [confirmDeleteOpen, setConfirmDeleteOpen] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
+  const [customApiKey, setCustomApiKey] = React.useState("");
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCustomApiKey(localStorage.getItem("vengpt_custom_api_key") || "");
+    }
+  }, [open]);
+
+  const handleApiKeyChange = (val: string) => {
+    setCustomApiKey(val);
+    if (typeof window !== "undefined") {
+      if (val.trim()) {
+        localStorage.setItem("vengpt_custom_api_key", val.trim());
+      } else {
+        localStorage.removeItem("vengpt_custom_api_key");
+      }
+    }
+  };
 
   // Clerk hook - safely handle if Clerk is not mounted
   let clerkUser = null;
@@ -241,6 +259,20 @@ export function SettingsDialog({
                       <span>Balanced (0.7)</span>
                       <span>Creative (1.5)</span>
                     </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-border/60">
+                    <label className="text-sm font-medium block mb-1">Custom API Key (Optional)</label>
+                    <p className="text-xs text-muted-foreground mb-2">
+                      Provide your OpenAI or Groq API key for unlimited live streaming. Persisted locally in your browser.
+                    </p>
+                    <input
+                      type="password"
+                      placeholder="sk-... or gsk_..."
+                      value={customApiKey}
+                      onChange={(e) => handleApiKeyChange(e.target.value)}
+                      className="w-full text-xs font-mono rounded-lg border border-border bg-background px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+                    />
                   </div>
                 </div>
               )}

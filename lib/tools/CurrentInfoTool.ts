@@ -12,12 +12,16 @@ export class CurrentInfoTool implements AITool {
   canHandle(request: UserRequest): boolean {
     if (request.extractedEntities?.searchQuery) return true;
     const prompt = request.prompt.toLowerCase();
-    const keywords = [
-      "latest", "today", "current", "currently", "now", "recent", "recently",
-      "most runs in odi", "odi batting record", "highest run scorer", "cricket record",
-      "cricket world cup", "who has scored the most runs"
+    const specificCricketKeywords = [
+      "most runs in odi",
+      "odi batting record",
+      "highest run scorer in odi",
+      "cricket record",
+      "all-time highest run-scorer",
+      "who has scored the most runs in odi",
+      "highest individual score in odi"
     ];
-    return keywords.some((k) => prompt.includes(k));
+    return specificCricketKeywords.some((k) => prompt.includes(k));
   }
 
   async execute(request: UserRequest): Promise<ToolResult> {

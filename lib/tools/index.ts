@@ -16,17 +16,13 @@ export * from "./ContextualFollowupTool";
 export * from "./TextTools";
 export * from "./RAGKnowledgeTool";
 
-// Instantiated tool registry
+// Active tool registry - Only keep high-fidelity tools that perform genuine computation
+// (Text, coding, and explanations are delegated to the unified generative AI engine)
 export const REGISTERED_TOOLS: AITool[] = [
-  new ContextualFollowupTool(),
   new ImageGenerationTool(),
   new CalculatorTool(),
   new CurrentInfoTool(),
   new RAGKnowledgeTool(),
-  new CodingTool(),
-  new ExplanationTool(),
-  new TextRewriterTool(),
-  new SummarizerTool(),
 ];
 
 /**
